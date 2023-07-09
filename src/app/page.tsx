@@ -2,47 +2,66 @@
 
 import BasicInfoInput from "@/components/Form/StepOneBasicInfoForm";
 import StepTwoPassAndUserForm from "@/components/Form/StepTwoPassAndUserForm";
-import { Field, Form, Formik } from "formik";
+import { Formik, useFormikContext } from "formik";
+import { useState } from "react";
 import * as Yup from 'yup';
 
-const SignupSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  lastName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-});
+const getCharacterValidationError = (str: string) => {
+  return `Your password must have at least 1 ${str} character`;
+};
 
-const initialValues = {
+
+
+export const initialValues = {
   firstName: '',
   lastName: '',
   avatar: [],
   userName: '',
-  password: 0,
+  password: '',
+  confirmPassword: '',
 }
 
+const SignupSchema = Yup.object().shape({
+
+  password: Yup.string()
+    .required("Please enter a password")
+    .min(8, "Password must have at least 8 characters")
+    .matches(/[0-9]/, getCharacterValidationError("digit"))
+    .matches(/[a-z]/, getCharacterValidationError("lowercase"))
+    .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
+  confirmPassword: Yup.string()
+    .required("Please re-type your password")
+    .oneOf([Yup.ref("password")], "Passwords does not match"),
+});
+
+
 export default function Home(): JSX.Element {
+  const [steps, setSteps] = useState<string>("firstStep")
+  const [avatar, setAvatar] = useState<any>()
+  function HandleSteps(props: string) {
+    setSteps(props)
+  }
+
+
   return (
 
-    <div className="flex flex-col w-full items-center gap-y-1">
+    <div className="flex flex-col w-full items-center gap-y-1 mt-40">
       <Formik
         initialValues={initialValues}
-        validationSchema={SignupSchema}
         onSubmit={values => {
-          // same shape as initial values
-          console.log(values);
+          console.log(values)
+          setSteps("secondStep")
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, validateField, validateForm }) => (
           <>
-            <BasicInfoInput errors={errors} touched={touched} />
-            <StepTwoPassAndUserForm errors={errors} touched={touched} />
+            {steps === "firstStep" && <BasicInfoInput validateField={validateField} avatar={avatar} setAvatar={setAvatar} />}
+            {steps === "secondStep" && <StepTwoPassAndUserForm HandleSteps={HandleSteps} />}
           </>
         )}
       </Formik>
+
+
     </div>
   )
 }
