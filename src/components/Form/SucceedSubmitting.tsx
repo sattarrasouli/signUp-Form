@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { FormikState } from 'formik'
 import { IDataSubmit } from './Form'
 
-
 interface IProps {
     HandleSteps: (arg0: string) => void,
     resetForm: (nextState?: Partial<FormikState<IDataSubmit>> | undefined) => void
