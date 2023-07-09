@@ -2,13 +2,12 @@ import { ErrorMessage, Field, Form } from 'formik';
 import Image from 'next/image';
 import avatarDefault from '../../assets/avatar.png';
 
-const TextInput = ({ field, form, ...props }: any) => {
-    return <input className="border-[1px] w-[240px] rounded border-gray-200 p-2 mt-4" {...field} {...props} />;
+export const TextInput = ({ field, form, ...props }: any) => {
+    return <input className="border-[1px] w-[320px] rounded border-gray-200 p-2 mt-4" {...field} {...props} />;
 };
 
 export const InputError = ({ fieldName }: any) => {
-    console.log('fieldName', fieldName)
-    return <p className=' text-rose-500 float-right w-[240px] text-xs'>{fieldName}</p>;
+    return <p className=' text-rose-500 float-right w-[320px] text-xs absolute'>{fieldName}</p>;
 };
 
 function validateName(value: any) {
@@ -23,6 +22,7 @@ function validateName(value: any) {
     }
     return error;
 }
+
 function validateLastName(value: any) {
     let error;
     if (!value) {
@@ -49,15 +49,16 @@ function StepOneBasicInfoForm({ setAvatar, avatar }: any) {
                     <input id="file-upload" onChange={(event: any) => setAvatar(event.target.files[0])} accept="image/gif, image/jpeg, image/png" name="file-upload" type="file" className="sr-only" />
                 </label>
             </div>
-            <Field name="firstName" component={TextInput} placeholder="First Name" validate={validateName} />
-            <ErrorMessage name="firstName" render={(msg: any) => <InputError fieldName={msg} />} />
-            <ErrorMessage name="password" render={(msg: any) => <InputError fieldName={msg} />} />
-            <ErrorMessage name="username" render={(msg: any) => <InputError fieldName={msg} />} />
-            <Field name="lastName" component={TextInput} placeholder="Last Name" validate={validateLastName} />
-            <ErrorMessage name="lastName" render={(msg: any) => <InputError fieldName={msg} />} />
-            <ErrorMessage name="avatar" render={(msg: any) => <InputError fieldName={msg} />} />
+            <div className='relative mb-1'>
+                <Field name="firstName" component={TextInput} placeholder="First Name" validate={validateName} />
+                <ErrorMessage name="firstName" render={(msg: any) => <InputError fieldName={msg} />} />
+            </div>
+            <div className='relative mb-1'>
+                <Field name="lastName" component={TextInput} placeholder="Last Name" validate={validateLastName} />
+                <ErrorMessage name="lastName" render={(msg: any) => <InputError fieldName={msg} />} />
+            </div>
             <p className='text-sm text-center mt-3 text-gray-500 mt-7'>by continuing, you go to set username and password</p>
-            <button type="submit" className='bg-sky-400 h-10 mt-3 text-white rounded p-2'>Continue</button>
+            <button type="submit" className='bg-sky-400 h-10 mt-3 text-white rounded py-2 px-3' >Continue</button>
         </Form>
     )
 }

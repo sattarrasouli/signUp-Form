@@ -1,32 +1,8 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik'
-import React from 'react'
-import * as Yup from 'yup';
-import { InputError, } from './StepOneBasicInfoForm';
-
-
-
-const TextInput = ({ field, form, ...props }: any) => {
-    return <input className="border-[1px] rounded border-gray-800 p-2 mt-4" {...field} {...props} />;
-};
-const getCharacterValidationError = (str: string) => {
-    return `Your password must have at least 1 ${str} character`;
-};
-
-const SignupSchema = Yup.object().shape({
-    // password: Yup.string()
-    //     .required("Please enter a password")
-    //     .min(8, "Password must have at least 8 characters")
-    //     .matches(/[0-9]/, getCharacterValidationError("digit"))
-    //     .matches(/[a-z]/, getCharacterValidationError("lowercase"))
-    //     .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
-    // confirmPassword: Yup.string()
-    //     .required("Please re-type your password")
-    //     .oneOf([Yup.ref("password")], "Passwords does not match"),
-    username: Yup.string()
-        .min(2, 'Too Short!')
-        .max(70, 'Too Long!')
-        .required('Required'),
-});
+import { ErrorMessage, Field, Form } from 'formik';
+import Image from 'next/image';
+import { useState } from 'react';
+import arrowLeft from '../../assets/arrowleft.svg';
+import { InputError, TextInput, } from './StepOneBasicInfoForm';
 
 
 function validateUserName(value: any) {
@@ -43,32 +19,53 @@ function validateUserName(value: any) {
 }
 
 
-async function validatePassword(value: any) {
-    let error;
-    if (!value) {
-        error = 'Required';
-    } else if (! /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(value)) {
-        error = 'invalid password, it must contains a lowercase and uppercase and a symbol';
-    } else if (value.length < 8) {
-        error = 'at least 8 characters!';
-    }
-    return error;
-}
-
 function StepTwoPassAndUserForm({ HandleSteps }: any) {
+    const [password, setPassword] = useState<number>()
+
+
+    async function validatePassword(value: any) {
+        setPassword(value)
+        let error;
+        if (!value) {
+            error = 'Required';
+        } else if (! /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(value)) {
+            error = 'it must contains a lowercase,a uppercase and a symbol';
+        } else if (value.length < 8) {
+            error = 'at least 8 characters!';
+        }
+        return error;
+    }
+
+    function validatePasswordConfirm(value: any) {
+        let error;
+        if (value !== password) {
+            error = 'password are not equal';
+        }
+        return error;
+    }
+
     return (
-        <Form className='flex flex-col w-[400px] h-[400px] bg-white rounded p-3'>
-            <Field name="username" component={TextInput} validate={validateUserName} placeholder="User Name" />
-            <ErrorMessage name="username" render={(msg: any) => <InputError fieldName={msg} />} />
+        <Form className='flex flex-col w-[450px] h-[450px] bg-white rounded p-3 items-center justify-evenly'>
+            <div className='w-full ml-4'>
+                <button onClick={() => HandleSteps("firstStep")}><Image className='color-white' src={arrowLeft} alt='back' width={20} height={20} /></button>
+            </div>
+            <p className='text-xl'>Enter your username and password</p>
+            <div className='relative mb-1'>
+                <Field name="username" component={TextInput} validate={validateUserName} placeholder="User Name" />
+                <ErrorMessage name="username" render={(msg: any) => <InputError fieldName={msg} />} />
+            </div>
 
-            <Field name="password" component={TextInput} validate={validatePassword} type="password" />
-            <ErrorMessage name="password" render={(msg: any) => <InputError fieldName={msg} />} />
-            {/* 
-            <Field name="confirmPassword" component={TextInput} validate={validatePasswordConfirm} type="password" />
-            <ErrorMessage name="confirmPassword" render={(msg: any) => <InputError fieldName={msg} />} /> */}
+            <div className='relative mb-1'>
+                <Field name="password" component={TextInput} validate={validatePassword} type="password" placeholder="Password" />
+                <ErrorMessage name="password" render={(msg: any) => <InputError fieldName={msg} />} />
+            </div>
 
-            <button type="submit">Submit</button>
-            <button onClick={() => HandleSteps("firstStep")}>back</button>
+            <div className='relative mb-1'>
+                <Field name="confirmPassword" component={TextInput} validate={validatePasswordConfirm} type="password" placeholder="Confirm Password" />
+                <ErrorMessage name="confirmPassword" render={(msg: any) => <InputError fieldName={msg} />} />
+            </div>
+
+            <button type="submit" className='bg-sky-400 h-10 mt-3 text-white rounded py-2 px-3'>Submit</button>
         </Form>
     )
 }
