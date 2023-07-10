@@ -1,5 +1,5 @@
 
-# Project Title
+# sign up form
 
 a sign up form with two steps, 
 using reactjs, react-query, formik and tailwind.
@@ -19,6 +19,7 @@ using reactjs, react-query, formik and tailwind.
 ## Run
 
 yarn 
+
 yarn dev
 
 ## Appendix
