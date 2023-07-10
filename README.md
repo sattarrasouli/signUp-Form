@@ -1,34 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Project Title
 
-First, run the development server:
+a sign up form with two steps, 
+using reactjs, react-query, formik and tailwind.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+## API Reference
+
+#### Post all items
+
+```http base url
+  POST https://jsonplaceholder.typecode.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `/posts ` | `string` | send form data to this api except photo |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+yarn 
+yarn dev
 
-## Learn More
+## Appendix
 
-To learn more about Next.js, take a look at the following resources:
+i used tailwind instead of mui because it's trendy these days.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+i post forms to jsonplaceholder except the photo.
+couldn't find proper free api to post photo due to my poor internet connection and time.
+i used .env for all stages because we don't need the others in this test project.
+and it's not ignored.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+i tried to keep it simple and not adding any packages.
+only used axios to make http request.
